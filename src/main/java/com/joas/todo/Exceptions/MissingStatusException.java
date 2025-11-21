@@ -1,13 +1,13 @@
 package com.joas.todo.Exceptions;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
 
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class StatusNotFoundException extends RuntimeException{
+public class MissingStatusException extends RuntimeException{
 
-    public StatusNotFoundException(String message){
+    public MissingStatusException(String message){
         super(message);
     }
 }

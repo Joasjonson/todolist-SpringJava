@@ -1,5 +1,6 @@
 package com.joas.todo.Controller;
 
+import com.joas.todo.Exceptions.MissingStatusException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.joas.todo.Service.TaskService;
@@ -40,7 +41,8 @@ public class TaskController {
 
     @GetMapping("/status/{status}")
     public ResponseEntity<List<Task>> getTaskByStatus(@PathVariable String status) {
-        return ResponseEntity.ok(taskService.getTasksByStatus(status));
+        List<Task> tasks = taskService.getTasksByStatus(status);
+        return ResponseEntity.ok(tasks);
     }
 
 

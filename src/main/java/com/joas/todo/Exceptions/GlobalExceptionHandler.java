@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.LinkedHashMap;
-
-
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
@@ -23,6 +21,16 @@ public class GlobalExceptionHandler {
         body.put("error", "Task Not Found");
         body.put("message", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MissingStatusException.class)
+    public ResponseEntity<Object> handleMissingStatusException(MissingStatusException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("error", "Missing Status Parameter");
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(StatusNotFoundException.class)

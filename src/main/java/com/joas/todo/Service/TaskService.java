@@ -1,5 +1,6 @@
 package com.joas.todo.Service;
 
+import com.joas.todo.Exceptions.MissingStatusException;
 import com.joas.todo.Exceptions.TaskNotFoundException;
 import com.joas.todo.Exceptions.StatusNotFoundException;
 import com.joas.todo.Model.Status;
@@ -17,8 +18,7 @@ public class TaskService {
     public TaskService(TaskRepository repository) {
         this.repository = repository;
     }
-
-
+    
     public Task saveTask(Task task){
         return repository.save(task);
     }
@@ -32,16 +32,17 @@ public class TaskService {
     }
 
     public List<Task> getTasksByStatus(String status) {
+        if (status == null || status.isBlank()) {
+            throw new MissingStatusException("Status parameter is missing");
+        }
+
         Status parsed;
         try {
             parsed = Status.valueOf(status.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new StatusNotFoundException("Invalid status: " + status);}
 
-        List<Task> tasks = repository.findByStatus(parsed);
-        if (tasks.isEmpty()) {
-            throw new TaskNotFoundException("No tasks found with status: " + status);}
-        return tasks;
+        return repository.findByStatus(parsed);
     }
 
     public void deleteTask(Long id){
@@ -61,7 +62,5 @@ public class TaskService {
 
         repository.save(updatedTask);
     }
-
-
 
 }
